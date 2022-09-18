@@ -1,6 +1,6 @@
 def hello() -> str:
     """Returns Hello World greetings"""
-    return 'Hello world'
+    return 'Hello world!'
 
 
 def main():
