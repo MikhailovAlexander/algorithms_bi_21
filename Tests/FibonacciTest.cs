@@ -8,6 +8,7 @@ public class FibonacciTest
 {
     private readonly FibonacciFunc _fibonacci = new FibonacciFunc(Fibonacci.FibonacciRec)
                                                 + new FibonacciFunc(Fibonacci.FibonacciIter);
+
     [Fact]
     public void TestZero()
     {
@@ -19,7 +20,7 @@ public class FibonacciTest
     {
         Assert.Throws<ArgumentException>(() => this._fibonacci(-1));
     }
-    
+
     [Fact]
     public void TestNumbers()
     {
