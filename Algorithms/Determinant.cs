@@ -2,6 +2,9 @@ namespace Algorithms;
 
 public class Determinant
 {
+    
+    
+    
     /// <summary>
     /// Calculates the value of the matrix determinant.the value of the matrix determinant
     /// </summary>
