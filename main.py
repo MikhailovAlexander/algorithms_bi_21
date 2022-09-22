@@ -11,7 +11,6 @@ def fibonacci_rec(num: int) -> int:
         return 1
     else:
         return fibonacci_rec(num - 1) + fibonacci_rec(num - 2)
-    pass
 
 
 def fibonacci_iter(num: int) -> int:
@@ -29,10 +28,11 @@ def fibonacci_iter(num: int) -> int:
             a = b
             b = c
         return b
-    pass
 
 
 def determinant(matrix: [[int]]) -> int:
+    if not check_matrix(matrix):
+        raise Exception("TODO")
     i = list(range(len(matrix)))
     result = 0
     if len(matrix) == 1:
@@ -50,7 +50,13 @@ def determinant(matrix: [[int]]) -> int:
     return result
 
 
-pass
+def check_matrix(matrix) -> bool:
+    string = len(matrix)
+    for i in range(string):
+        column = len(matrix[i])
+        if string != column:
+            return False
+    return True
 
 
 def print_exec_time(func: callable(object), **kwargs: dict[str: Any]) -> None:
