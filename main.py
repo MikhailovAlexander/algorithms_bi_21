@@ -31,10 +31,10 @@ def gcd_iterative_slow(a: int, b: int) -> int:
     """
     if a is None or b is None:
         raise Exception("")
-    while not a * b == 0 and a != b:
+    while a * b != 0 and a != b:
         if a < b:
             a, b = b, a
-            a -= b
+        a = a - b
     return a
 
 

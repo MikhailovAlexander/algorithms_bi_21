@@ -5,7 +5,7 @@ from gcd_gen import GcdGenerator
 
 
 class TestGcd(unittest.TestCase):
-    gcd_functions = [gcd_iterative_slow]
+    gcd_functions = [gcd_recursive, gcd_iterative_slow, gcd_iterative_fast]
 
     def test_first_none(self):
         for gcd in self.gcd_functions:
