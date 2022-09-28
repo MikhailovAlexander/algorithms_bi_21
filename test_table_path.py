@@ -1,28 +1,28 @@
 import unittest
 
-from main import get_min_cost_path
+from main import get_min_cost_path, ArgumentException
 
 
 class TestTablePath(unittest.TestCase):
     def test_none(self):
-        self.assertRaisesRegex(Exception,
+        self.assertRaisesRegex(ArgumentException,
                                'The price table is not a rectangular matrix '
                                'with float values', get_min_cost_path, None)
 
     def test_empty(self):
-        self.assertRaisesRegex(Exception,
+        self.assertRaisesRegex(ArgumentException,
                                'The price table is not a rectangular matrix '
                                'with float values', get_min_cost_path, [])
 
     def test_str_value(self):
-        self.assertRaisesRegex(Exception,
+        self.assertRaisesRegex(ArgumentException,
                                'The price table is not a rectangular matrix '
                                'with float values', get_min_cost_path, [['ab']])
 
     def test_jag(self):
         table = [[1., 2., 3.],
                  [1., 2.]]
-        self.assertRaisesRegex(Exception,
+        self.assertRaisesRegex(ArgumentException,
                                'The price table is not a rectangular matrix '
                                'with float values', get_min_cost_path, table)
 
