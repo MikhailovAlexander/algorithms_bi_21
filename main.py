@@ -19,7 +19,46 @@ def get_min_cost_path(price_table: list[list[float]]) ->\
     :return: a dictionary with keys: cost - the minimum value of the cost of the
     path, path - an ordered list of tuples with cell indices.
     """
-    pass
+
+    exception_message = 'The price table is not a rectangular matrix with float values'
+    if (price_table is None) or (len(price_table) == 0):
+        raise ArgumentException(exception_message)
+
+    row_length = len(price_table[0])
+    for m in price_table:
+        if (m is None) or (len(m) != row_length):
+            raise ArgumentException(exception_message)
+        for j in m:
+            if type(j) is not float:
+                raise ArgumentException(exception_message)
+    new_price_table = [[float('inf')] * (len(price_table[0]) + 1) for i in range(len(price_table) + 1)]
+    mas_path = []
+
+    for i in range(1, len(price_table) + 2):
+        for g in range(1, len(price_table[0]) + 2):
+            if i - 1 < len(price_table) and g - 1 < len(price_table[0]):
+                new_price_table[i][g] = price_table[i - 1][g - 1]
+
+    for i in range(1, len(price_table) + 1):
+        for g in range(1, len(price_table[0]) + 1):
+            if i == 1 and g == 1:
+                continue
+            new_price_table[i][g] += \
+                min(new_price_table[i - 1][g], new_price_table[i][g - 1])
+
+    Min_path = new_price_table[-1][-1]
+    mas_path.append((len(price_table) - 1, len(price_table[0]) - 1))
+    i, g = len(price_table), len(price_table[0])
+    while i * g != 1:
+        if new_price_table[i - 1][g] > new_price_table[i][g - 1]:
+            g -= 1
+        else:
+            i -= 1
+        mas_path.append((i - 1, g - 1))
+
+    mas_path.reverse()
+
+    return {'cost': Min_path, 'path': mas_path}
 
 
 def main():
