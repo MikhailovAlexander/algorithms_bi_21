@@ -23,18 +23,22 @@ def get_min_cost_path(price_table: list[list[float]]) ->\
         raise ArgumentException('The price table is not a rectangular matrix with float values')
     cost_table = __calculate_costs(price_table)
     path = __find_path(cost_table)
-    return {'cost': cost_table[-1][-1], 'path': list(reversed(path))}
+    return {'cost': cost_table[-1][-1], 'path': path}
 def __table_has_errors(price_table: list[list[float]]) -> bool:
-    if price_table is None or price_table == []:
+    if price_table is None or price_table == [] or __table_is_not_float(price_table):
         return True
     row_dlina = len(price_table[0])
     for row in price_table:
         if row_dlina != len(row):
             return True
-        for value in row:
-            if type(value) != float:
-                return True
     return False
+
+def __table_is_not_float(price_table: list[list[float]]) -> bool:
+    for row in price_table:
+        for value in row:
+            if type(value) == float:
+                return False
+    return True
 
 def __calculate_costs(price_table: list[list[float]]) -> list[list[float]]:
     new_table = [[float('inf')]*(len(price_table[0]) + 1) for i in range(len(price_table) + 1)]
@@ -47,19 +51,23 @@ def __calculate_costs(price_table: list[list[float]]) -> list[list[float]]:
             new_table[i][j] = min(new_table[i - 1][j], new_table[i][j - 1]) + price_table[i - 1][j - 1]
     return new_table
 
-def __find_path(new_table: list[list[float]]) -> list[tuple[int,int]]:
-    row = len(new_table) - 2
-    col = len(new_table[0]) - 2
+def __get_path(new_table: list[list[float]], row, col) -> list[tuple[int,int]]:
     list_of_kort = [tuple((row, col))]
     while row != 0 or col != 0:
         cost_up = new_table[row][col + 1]
         cost_left = new_table[row + 1][col]
-        if cost_up > cost_left:
+        if cost_left < cost_up:
             col -= 1
         else:
             row -= 1
         list_of_kort.append(tuple((row, col)))
-    return list_of_kort
+    return list_of_kort[::-1]
+
+def __find_path(new_table: list[list[float]]) -> list[tuple[int,int]]:
+    row = len(new_table) - 2
+    col = len(new_table[0]) - 2
+    return __get_path(new_table, row, col)
+
 
 def main():
     table = [[1., 2., 2.],
