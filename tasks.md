@@ -16,6 +16,50 @@
 ```
 ## Условия задачи от команд:
 ### White Team:
+
+<table>
+<thead>
+  <tr>
+    <th>A</th>
+    <th>B</th>
+    <th>C</th>
+    <th>D</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>6</td>
+    <td>5</td>
+    <td>3</td>
+    <td>9</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>9</td>
+    <td>7</td>
+    <td>10</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>13</td>
+    <td>8</td>
+    <td>11</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>15</td>
+    <td>14</td>
+    <td>16</td>
+  </tr>
+  <tr>
+    <td>19</td>
+    <td>17</td>
+    <td>18</td>
+    <td>17</td>
+  </tr>
+</tbody>
+</table>
+
 ### Spirits Team:
 ### Yellow Team:
 ### Pink Team:
