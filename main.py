@@ -23,11 +23,12 @@ def get_min_cost_path(price_table: list[list[float]]) ->\
     path, path - an ordered list of tuples with cell indices.
     """
     #проверка
-    costs_table = __calculate_costs(price_table)
-    pass
+    output = __calculate_costs(price_table)
+    return output
 
 
-def __calculate_costs(price_table) -> list[list[float]]:
+def __calculate_costs(price_table) -> dict[str: float, str: list[tuple[int, int]]]:
+
     matrix_copy = copy.deepcopy(price_table)
 
     length = len(matrix_copy[0])
@@ -47,30 +48,31 @@ def __calculate_costs(price_table) -> list[list[float]]:
             if (i == 0) and (j == 0):
                 matrix_copy[i+1][j+1] = price_table[i][j]
 
-            if matrix_copy[i+1][j] < matrix_copy[i][j+1]:
-                matrix_copy[i+1][j+1] += matrix_copy[i+1][j]
+            elif matrix_copy[i+1][j] < matrix_copy[i][j+1]:
+                matrix_copy[i+1][j+1] = price_table[i][j] + matrix_copy[i+1][j]
             else:
-                matrix_copy[i+1][j+1] += matrix_copy[i][j+1]
+                matrix_copy[i+1][j+1] = price_table[i][j] + matrix_copy[i][j+1]
 
-    path = [(count_row, count_column)]
+    path = [(count_row-1, count_column-1)]
     while count_row != 1 or count_column != 1:
-        if matrix_copy[count_row-1][count_column] < matrix_copy[count_row][count_column-1]:
-            path.insert(0, (count_row-2, count_column-1))
-            count_row -= 1
-        else:
-            path.insert(0, (count_row-1, count_column - 2))
+        if matrix_copy[count_row][count_column-1] < matrix_copy[count_row-1][count_column]:
+            path.insert(0, (count_row-1, count_column-2))
             count_column -= 1
+        else:
+            path.insert(0, (count_row - 2, count_column - 1))
+            count_row -= 1
 
-
-
-    print(path)
-    return matrix_copy
+    output = {'cost': matrix_copy[-1][-1], 'path': path}
+    return output
 
 
 def main():
-    table = [[1., 2., 2.],
-             [3., 4., 2.],
-             [1., 1., 2.]]
+    table = [[1., 4., 5., 7.],
+             [1., 4., 5., 6.],
+             [10., 11., 7., 10.],
+             [8., 9., 4., 5.],
+             [5., 6., 7., 10.]
+             ]
     print(get_min_cost_path(table))
 
 
