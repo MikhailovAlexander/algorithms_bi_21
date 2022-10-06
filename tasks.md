@@ -60,8 +60,6 @@
 </tbody>
 </table>
 
-**Результат: 28**
-
 ### Spirits Team:
 ### Yellow Team:
 ### Pink Team:
