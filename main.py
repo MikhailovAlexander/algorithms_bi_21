@@ -10,8 +10,7 @@ class ArgumentException(Exception):
         super().__init__(self.message)
 
 
-def get_min_cost_path(price_table: list[list[float]]) -> \
-        dict[str: float, str: list[tuple[int, int]]]:
+def get_min_cost_path(price_table: list[list[float]]) -> dict[str: float, str: list[tuple[int, int]]]:
     if __table_has_errors(price_table):
         raise ArgumentException('The price table is not a rectangular matrix with float values')
     costs_table = __calculate_costs(price_table)
