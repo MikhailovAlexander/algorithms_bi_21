@@ -10,13 +10,21 @@ class ArgumentException(Exception):
         super().__init__(self.message)
 
 
-def get_min_cost_path(price_table: list[list[float]]) -> dict[str: float, str: list[tuple[int, int]]]:
+def get_min_cost_path(price_table: list[list[float]]) -> \
+        dict[str: float, str: list[tuple[int, int]]]:
+    # Searches for the minimum cost path in the table. Each cell in the table
+    #     has some price per visit.
+    #     param price_table a matrix with float cell price values.
+    #     raise ArgumentException when price_table is not a rectangle float matrix.
+    #     return a dictionary with keys cost - the minimum value of the cost of the
+    #     path, path - an ordered list of tuples with cell indices.
+
+
     if __table_has_errors(price_table):
         raise ArgumentException('The price table is not a rectangular matrix with float values')
     costs_table = __calculate_costs(price_table)
     path = __find_path(costs_table)
     return {'cost': costs_table[-1][-1], 'path': list(reversed(path))}
-    pass
 
 
 def __table_has_errors(price_table: list[list[float]]) -> bool:
@@ -46,12 +54,6 @@ def __is_rectangle(price_table: list[list[float]]) -> bool:
 def __calculate_costs(price_table: list[list[float]]) -> list[list[float]]:
     temp_table = [[float('inf')] * (len(price_table[0]) + 1) for i in range(len(price_table) + 1)]
     temp_table[1][1] = price_table[0][0]
-
-    # for i in range(1, len(temp_table)):
-    #     temp_table[i][0] = temp_table[i - 1][0] + price_table[i][0]
-    #
-    # for j in range(1, len(temp_table[0]) - 1):
-    #     temp_table[0][j] = temp_table[0][j - 1] + price_table[0][j]
 
     for i in range(1, len(temp_table)):
         for j in range(1, len(temp_table[0])):
