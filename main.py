@@ -22,13 +22,14 @@ def get_min_cost_path(price_table: list[list[float]]) ->\
     :return: a dictionary with keys: cost - the minimum value of the cost of the
     path, path - an ordered list of tuples with cell indices.
     """
-    #проверка
+    if not __is_readable(price_table):
+        raise ArgumentException('The price table is not a rectangular matrix with float values')
+
     output = __calculate_costs(price_table)
     return output
 
 
 def __calculate_costs(price_table) -> dict[str: float, str: list[tuple[int, int]]]:
-
     matrix_copy = copy.deepcopy(price_table)
 
     length = len(matrix_copy[0])
@@ -64,6 +65,24 @@ def __calculate_costs(price_table) -> dict[str: float, str: list[tuple[int, int]
 
     output = {'cost': matrix_copy[-1][-1], 'path': path}
     return output
+
+
+def __is_readable(matrix) -> bool:
+    if matrix is None or __has_string(matrix) or matrix == []:
+        return False
+    len1 = len(matrix[0])
+    for row in matrix:
+        if len(row) != len1:
+            return False
+    return True
+
+
+def __has_string(matrix) -> bool:
+    for row in matrix:
+        for element in row:
+            if not isinstance(element, float):
+                return True
+    return False
 
 
 def main():
