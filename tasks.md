@@ -110,6 +110,7 @@
   </tr>
 </tbody>
 </table>
+
 ### Yellow Team:
 | A | B | C |  D |
 | --- | --- | --- |  --- |
