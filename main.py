@@ -9,9 +9,39 @@ def tridiagonal_determinant(matrix: list[list[int]]) -> int:
     :raise ArgumentException: when parameter is not a tridiagonal integer matrix
     :return: the value of the matrix determinant
     """
-
-
+    if not (__is_readable(matrix)) or not (__correct_digits(matrix)):
+        raise ArgumentException('parameter is not a tridiagonal integer matrix')
     return __determinant_rec(matrix)
+
+
+def __is_readable(matrix) -> bool:
+    if matrix is None or matrix == []:
+        return False
+    len1 = len(matrix[0])
+    for row in matrix:
+        if len(row) != len1:
+            return False
+    return True
+
+
+def __correct_digits(matrix) -> bool:
+    if len(matrix) == 1:
+        return True
+
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if i == j:
+                if matrix[i][j] != matrix[0][0]:
+                    return False
+            if i == j - 1:
+                if matrix[i][j] != matrix[0][1]:
+                    return False
+            if i == j + 1:
+                if matrix[i][j] != matrix[1][0]:
+                    return False
+            elif matrix[i][j] != 0:
+                return False
+    return True
 
 
 def __determinant_rec(matrix) -> int:
