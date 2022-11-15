@@ -25,7 +25,7 @@ $$
 Порядок матрицы _n_ = 7
 ## Решение :
 **1.**
-$$ \ det {A_n}\ = 3 \cdot det A_{n-1} - 2 \cdot 1 \cdot det A_{n-2} $$ 
+$$ \ det {A_n}\ = 3 \cdot det A_{n-1} - 2 \cdot 1 \cdot det A_{n-2}$$
 **2.**
 $$λ^n = 3 \cdot λ^{n-1} -  2\cdot λ^{n-2} | ÷ λ^{n-2}$$
 $$λ^2 = 3 \cdot λ - 2$$
