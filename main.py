@@ -17,7 +17,7 @@ def tridiagonal_determinant(matrix: list[list[int]]) -> int:
 def __is_readable(matrix) -> bool:
     if matrix is None or matrix == []:
         return False
-    len1 = len(matrix[0])
+    len1 = len(matrix)
     for row in matrix:
         if len(row) != len1:
             return False
@@ -27,39 +27,30 @@ def __is_readable(matrix) -> bool:
 def __correct_digits(matrix) -> bool:
     if len(matrix) == 1:
         return True
-
-    for i in range(len(matrix)):
-        for j in range(len(matrix[0])):
-            if i == j:
-                if matrix[i][j] != matrix[0][0]:
+    else:
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                if i == j:
+                    if matrix[i][j] != matrix[0][0]:
+                        return False
+                elif i == j - 1:
+                    if matrix[i][j] != matrix[0][1]:
+                        return False
+                elif i == j + 1:
+                    if matrix[i][j] != matrix[1][0]:
+                        return False
+                elif matrix[i][j] != 0:
                     return False
-            if i == j - 1:
-                if matrix[i][j] != matrix[0][1]:
-                    return False
-            if i == j + 1:
-                if matrix[i][j] != matrix[1][0]:
-                    return False
-            elif matrix[i][j] != 0:
-                return False
-    return True
+        return True
 
 
 def __determinant_rec(matrix) -> int:
-    """Считает определитель матрицы n-ого порядка"""
     if len(matrix) == 1:
         return matrix[0][0]
     elif len(matrix) == 2:
         return matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]
     else:
-        multipliers = matrix[0]
-        result = 0
-        character = 1
-        column_number = 0
-        for multiplier in multipliers:
-            result += character * multiplier * __determinant_rec(__smaller_matrix(matrix, 0, column_number))
-            character *= -1
-            column_number += 1
-        return result
+        return matrix[0][0] * __determinant_rec(__smaller_matrix(matrix, -1, -1)) - matrix[0][1]*matrix[1][0] * __determinant_rec(__smaller_matrix(__smaller_matrix(matrix, -1, -1), -1, -1))
 
 
 def __smaller_matrix(matrix: [[int]], row_number, column_number) -> [[int]]:
