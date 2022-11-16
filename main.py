@@ -38,15 +38,12 @@ def __correct_digits(matrix) -> bool:
     else:
         for i in range(len(matrix)):
             for j in range(len(matrix[0])):
-                if i == j:
-                    if matrix[i][j] != matrix[0][0]:
-                        return False
-                elif i == j - 1:
-                    if matrix[i][j] != matrix[0][1]:
-                        return False
-                elif i == j + 1:
-                    if matrix[i][j] != matrix[1][0]:
-                        return False
+                if i == j and matrix[i][j] != matrix[0][0]:
+                    return False
+                elif i == j - 1 and matrix[i][j] != matrix[0][1]:
+                    return False
+                elif i == j + 1 and matrix[i][j] != matrix[1][0]:
+                    return False
                 elif matrix[i][j] != 0:
                     return False
         return True
