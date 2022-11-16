@@ -17,7 +17,7 @@ def tridiagonal_determinant(matrix: list[list[int]]) -> int:
             a = matrix[0][0]
             b = matrix[0][1]
             c = matrix[1][0]
-            return DeterminantRec(a, b, c, n)
+        return DeterminantRec(a, b, c, n)
     raise ArgumentException('parameter is not a tridiagonal integer matrix')
 
 
