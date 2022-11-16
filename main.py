@@ -11,7 +11,15 @@ def tridiagonal_determinant(matrix: list[list[int]]) -> int:
     """
     if not (__is_readable(matrix)) or not (__correct_digits(matrix)):
         raise ArgumentException('parameter is not a tridiagonal integer matrix')
-    return __determinant_rec(matrix)
+
+    a = matrix[0][0]
+    size = len(matrix)
+
+    if size == 1:
+        return a
+
+    b, c = matrix[0][1], matrix[1][0]
+    return __determinant_rec(a, b, c, size)
 
 
 def __is_readable(matrix) -> bool:
@@ -44,22 +52,13 @@ def __correct_digits(matrix) -> bool:
         return True
 
 
-def __determinant_rec(matrix) -> int:
-    if len(matrix) == 1:
-        return matrix[0][0]
-    elif len(matrix) == 2:
-        return matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]
+def __determinant_rec(a, b, c, dimension) -> int:
+    if dimension == 1:
+        return a
+    elif dimension == 2:
+        return a * a - b * c
     else:
-        return matrix[0][0] * __determinant_rec(__smaller_matrix(matrix, -1, -1)) - matrix[0][1]*matrix[1][0] * __determinant_rec(__smaller_matrix(__smaller_matrix(matrix, -1, -1), -1, -1))
-
-
-def __smaller_matrix(matrix: [[int]], row_number, column_number) -> [[int]]:
-    """удаляет строку и столбец из матрицы"""
-    matrix_copy = copy.deepcopy(matrix)
-    matrix_copy.pop(row_number)
-    for i in matrix_copy:
-        i.pop(column_number)
-    return matrix_copy
+        return a * __determinant_rec(a, b, c, dimension - 1) - b * c * __determinant_rec(a, b, c, dimension - 2)
 
 
 def main():
