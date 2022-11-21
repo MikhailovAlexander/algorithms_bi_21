@@ -4,28 +4,19 @@ from custom_exception import ArgumentException
 def parameter_a(n):
     if n == 1:
         return 0
-    elif n == 2:
-        return 2
-    else:
-        return parameter_b(n - 1) + parameter_c(n - 1)
+    return parameter_b(n - 1) + parameter_c(n - 1)
 
 
 def parameter_b(n):
     if n == 1:
         return 1
-    if n == 2:
-        return 1
-    else:
-        return parameter_a(n - 1) + parameter_c(n - 1)
+    return parameter_a(n - 1) + parameter_c(n - 1)
 
 
 def parameter_c(n):
     if n == 1:
         return 1
-    if n == 2:
-        return 1
-    else:
-        return parameter_a(n - 1) + parameter_b(n - 1)
+    return parameter_a(n - 1) + parameter_b(n - 1)
 
 
 def get_triangle_path_count(length: int) -> int:
