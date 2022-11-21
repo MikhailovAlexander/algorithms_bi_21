@@ -1,27 +1,31 @@
 from custom_exception import ArgumentException
 
 
-def parametr_a(n):
+def parameter_a(n):
     if n == 1:
         return 0
     elif n == 2:
         return 2
     else:
-        return parametr_b(n - 1) + parametr_c(n - 1)
+        return parameter_b(n - 1) + parameter_c(n - 1)
 
 
-def parametr_b(n):
-    if n == 1 or n == 2:
+def parameter_b(n):
+    if n == 1:
+        return 1
+    if n == 2:
         return 1
     else:
-        return parametr_a(n - 1) + parametr_c(n - 1)
+        return parameter_a(n - 1) + parameter_c(n - 1)
 
 
-def parametr_c(n):
-    if n == 1 or n == 2:
+def parameter_c(n):
+    if n == 1:
+        return 1
+    if n == 2:
         return 1
     else:
-        return parametr_a(n - 1) + parametr_b(n - 1)
+        return parameter_a(n - 1) + parameter_b(n - 1)
 
 
 def get_triangle_path_count(length: int) -> int:
@@ -35,7 +39,7 @@ def get_triangle_path_count(length: int) -> int:
     """
     if type(length) is not int or length <= 0:
         raise ArgumentException('The parameter length must be an integer greater than 0')
-    return parametr_a(length)
+    return parameter_a(length)
 
 
 def setter_0(string, n, list1: list[str]):
