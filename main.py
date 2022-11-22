@@ -44,7 +44,7 @@ def generate_strings(length: int) -> list[str]:
     :raise ArgumentException: when integer is not equal or greater than zero.
     :return: the list of strings consisting zeroes and ones.
     """
-    if lengtn is None or not(type(length) is int) or length < 1:
+    if length is None or not(type(length) is int) or length < 1:
         raise ArgumentException('The parameter length must be an integer greater than 0')
     output = []
     __add1("", output, length)
