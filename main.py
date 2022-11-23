@@ -10,7 +10,7 @@ def get_triangle_path_count(length: int) -> int:
     greater than 0
     :return: the number of routes.
     """
-    pass
+    if
 
 
 def generate_strings(length: int) -> list[str]:
@@ -20,9 +20,25 @@ def generate_strings(length: int) -> list[str]:
     :raise ArgumentException: when integer is not equal or greater than zero.
     :return: the list of strings consisting zeroes and ones.
     """
-    pass
+    if length <= 0 or length is None or type(length) != int:
+        raise ArgumentException('The parameter length must be an integer greater than 0')
+    array=[]
+    __set_1('',length,array), __set_0('',length,array)
+    return array
+def __set_1(string,length,array)
+    if len(string) == length:
+        array.append(string)
+    else:
+        string += '1'
+    __set_1(string, length, array)
+    __set_0(string, length, array)
 
-
+def __set_0(string,length,array)
+    if len(string) == length:
+        array.append(string)
+    else:
+        string += '0'
+    __set_1(string, length, array)
 def main():
     print(get_triangle_path_count(4))
     print(generate_strings(5))
