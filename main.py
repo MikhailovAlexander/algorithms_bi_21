@@ -12,6 +12,7 @@ def get_triangle_path_count(length: int) -> int:
     """
     is_ok(length)
     return point_a(length)
+
 def point_a(n):
     if n == 1:
         return 0
