@@ -10,7 +10,6 @@ def get_triangle_path_count(length: int) -> int:
     greater than 0
     :return: the number of routes.
     """
-
     is_ok(length)
     return point_a(length)
 
