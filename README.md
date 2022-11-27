@@ -1,3 +1,4 @@
-# Диаграмма классов Green team
+## Task 7
+# Диаграмма классов GREEN TEAM
 
-![](images/green team.jpg)
+![Диаграмма классов по ленточному определителю](image/green%20team.jpg)
