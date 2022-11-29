@@ -1,5 +1,6 @@
-from typing import Union
+from typing import Union, List, Tuple
 import math
+
 
 
 from task import Task
@@ -41,7 +42,7 @@ class Schedule:
     get_schedule_for_executor(self, executor_idx: int) -> str:
         Returns the schedule for the executor.
     """
-    def __init__(self, tasks: list[Task], executor_count: int):
+    def __init__(self, tasks: List[Task], executor_count: int):
         """Schedule class constructor to initialize the object.
 
         :param tasks: a source task list.
@@ -53,37 +54,38 @@ class Schedule:
         error_msg = Schedule.__get_param_error(tasks)
         if error_msg is not None:
             raise ScheduleArgumentException(error_msg)
-        self.__tasks: list[Task] = tasks
+        self.__tasks: List[Task] = tasks
         self.__executor_count: int = executor_count
-        self.__executor_tasks: list[list[dict[str:Task, str: int]]] =\
+        self.__executor_tasks: List[List[dict[str:Task, str: int]]] =\
             [[] for i in range(executor_count)]
+        self.__totaltime: int = self.__calculate_totaltime()
         self.__duration: int = self.__calculate_duration()
+        self.__downtime: int = self.__calculate_downtime()
         self.__distribute_tasks()
 
     @property
-    def tasks(self) -> tuple[Task]:
-        """Returns the source task tuple."""
-        pass
+    def tasks(self) -> Tuple[Task]:
+        return tuple(self.__tasks)
 
     @property
     def task_count(self) -> int:
-        """Returns the source task count."""
-        pass
+        return len(self.__tasks)
 
     @property
     def executor_count(self) -> int:
-        """Returns the executor count."""
-        pass
+        return self.__executor_count
 
     @property
     def duration(self) -> int:
-        """Returns the schedule duration."""
-        pass
+        return self.__duration
 
     @property
     def downtime(self) -> int:
-        """Returns the downtime duration for all executors."""
-        pass
+        return self.__downtime
+
+    @property
+    def totaltime(self) -> int:
+        return self.__totaltime
 
     def get_downtime_for_executor(self, executor_idx: int) -> int:
         """Returns the downtime duration for the executor.
@@ -94,7 +96,16 @@ class Schedule:
             than the number of the executors.
         :return: the downtime duration for the executor.
         """
-        pass
+        if type(executor_idx) != int:
+            raise InternalScheduleException
+        if executor_idx + 1 > self.executor_count:
+            raise InternalScheduleException
+
+        s = self.totaltime - (executor_idx + 1) * self.duration
+        if s > 0:
+            return 0
+        else:
+            return 0 - s
 
     def get_schedule_for_executor(self, executor_idx: int) -> str:
         """Returns the schedule for the executor.
@@ -105,16 +116,53 @@ class Schedule:
             than the number of the executors.
         :return: the schedule for the executor.
         """
-        pass
+        if type(executor_idx) != int:
+            raise InternalScheduleException
+        if executor_idx + 1 > self.executor_count:
+            raise InternalScheduleException
+
+        start = self.duration * executor_idx
+        end = start + self.duration
+        current = 0
+        s = ''
+        t = 0
+        j = 1
+        for task in self.__tasks:
+            current += task.duration
+            if current > start and current - task.duration < end :
+                time = current - start
+                if time > self.duration:
+                    time = self.duration
+                s += str(j) + '. task: ' + task.name + ' from ' + str(t) +' to ' + str(time) + '\n'
+                j+=1
+                t = time
+        if t < self.duration:
+            s += str(j) + '. task: downtime from ' + str(t) + ' to ' + str(self.duration) + '\n'
+        return s
+
+    def __calculate_totaltime(self) -> int:
+        s = 0
+        for task in self.__tasks:
+            s += task.duration
+        return s
 
     def __calculate_duration(self) -> int:
-        pass
+        m = 0
+        for task in self.__tasks :
+            m = max(m,task.duration)
+        s = self.totaltime / self.__executor_count
+        s = math.ceil(s)
+
+        return max(s,m)
+
+    def __calculate_downtime(self) -> int:
+        return self.duration * self.__executor_count - self.totaltime
 
     def __distribute_tasks(self) -> None:
         pass
 
     @staticmethod
-    def __get_param_error(tasks: list[Task]) -> Union[str, None]:
+    def __get_param_error(tasks: List[Task]) -> Union[str, None]:
         pass
 
     def __get_executor_idx_error(self, executor_idx: int) -> Union[str, None]:
