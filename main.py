@@ -63,27 +63,30 @@ class Schedule:
     @property
     def tasks(self) -> tuple[Task]:
         """Returns the source task tuple."""
-        pass
+        return tuple(self.__tasks)
 
     @property
     def task_count(self) -> int:
         """Returns the source task count."""
-        pass
+        return len(self.__tasks)
 
     @property
     def executor_count(self) -> int:
         """Returns the executor count."""
-        pass
+        return self.__executor_count
 
     @property
     def duration(self) -> int:
         """Returns the schedule duration."""
-        pass
+        return self.__calculate_duration()
 
     @property
     def downtime(self) -> int:
         """Returns the downtime duration for all executors."""
-        pass
+        total = 0
+        for task in self.__tasks:
+            total += task.duration
+        return self.__duration * self.__executor_count - total
 
     def get_downtime_for_executor(self, executor_idx: int) -> int:
         """Returns the downtime duration for the executor.
@@ -94,7 +97,9 @@ class Schedule:
             than the number of the executors.
         :return: the downtime duration for the executor.
         """
-        pass
+        if executor_idx + 1 != self.__executor_count:
+            return 0
+        return self.downtime
 
     def get_schedule_for_executor(self, executor_idx: int) -> str:
         """Returns the schedule for the executor.
@@ -105,13 +110,45 @@ class Schedule:
             than the number of the executors.
         :return: the schedule for the executor.
         """
-        pass
+        return str(self.__executor_tasks[executor_idx])
 
     def __calculate_duration(self) -> int:
-        pass
+        maximum = 0
+        s = 0
+        for task in self.__tasks:
+            maximum = max(maximum, task.duration)
+            s += task.duration
+
+        if s % self.__executor_count != 0:
+            s = int(s/self.__executor_count) + 1
+        else:
+            s /= self.__executor_count
+
+        return max(maximum, s)
 
     def __distribute_tasks(self) -> None:
-        pass
+        taskNumber = 0
+        timeLeft = 0
+        for exNumber in range(self.__executor_count):
+            duration = self.__duration
+            while duration > 0 and taskNumber < self.task_count:
+                currentTask = self.tasks[taskNumber]
+                if timeLeft > 0:
+                    timeForEx = timeLeft
+                    timeLeft = 0
+                    duration -= timeForEx
+                elif currentTask.duration <= duration:
+                    timeForEx = currentTask.duration
+                    duration -= timeForEx
+                else:
+                    timeForEx = duration
+                    timeLeft = currentTask.duration - duration
+                    duration = 0
+                    taskNumber -= 1
+                self.__executor_tasks[exNumber].append({f'{currentTask.name}', timeForEx})
+                #self.__executor_tasks[exNumber].append({TASK: currentTask, PART: timeForEx})
+                taskNumber += 1
+        return
 
     @staticmethod
     def __get_param_error(tasks: list[Task]) -> Union[str, None]:
