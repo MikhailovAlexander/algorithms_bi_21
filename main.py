@@ -110,7 +110,14 @@ class Schedule:
             than the number of the executors.
         :return: the schedule for the executor.
         """
-        return str(self.__executor_tasks[executor_idx])
+        task_number = 0
+        s = ""
+        point = 0
+        for task in self.__executor_tasks[executor_idx]:
+            s += f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}\n'
+            task_number += 1
+            point += task.duration
+        return s
 
     def __calculate_duration(self) -> int:
         maximum = 0
@@ -145,7 +152,7 @@ class Schedule:
                     timeLeft = currentTask.duration - duration
                     duration = 0
                     taskNumber -= 1
-                self.__executor_tasks[exNumber].append({f'{currentTask.name}', timeForEx})
+                self.__executor_tasks[exNumber].append(Task(f'{currentTask.name}', timeForEx))
                 #self.__executor_tasks[exNumber].append({TASK: currentTask, PART: timeForEx})
                 taskNumber += 1
         return
