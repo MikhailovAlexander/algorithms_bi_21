@@ -97,6 +97,10 @@ class Schedule:
             than the number of the executors.
         :return: the downtime duration for the executor.
         """
+        error_msg = Schedule.__get_executor_idx_error(self.__executor_count)
+        if error_msg is not None:
+            raise InternalScheduleException(error_msg)
+
         if executor_idx + 1 != self.__executor_count:
             return 0
         return self.downtime
@@ -110,11 +114,18 @@ class Schedule:
             than the number of the executors.
         :return: the schedule for the executor.
         """
+        error_msg = Schedule.__get_executor_idx_error(self.__executor_count)
+        if error_msg is not None:
+            raise InternalScheduleException(error_msg)
+
         task_number = 0
-        s = ""
+        s = ''
         point = 0
         for task in self.__executor_tasks[executor_idx]:
-            s += f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}\n'
+            if task_number == len(self.__tasks) - 1:
+                s += f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}'
+            else:
+                s += f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}\n'
             task_number += 1
             point += task.duration
         return s
@@ -159,10 +170,19 @@ class Schedule:
 
     @staticmethod
     def __get_param_error(tasks: list[Task]) -> Union[str, None]:
-        pass
+        if len(tasks) == 0:
+            return 'The task list is empty'
+        for task in tasks:
+            if task is None or type(task) != Task:
+               return f'The task list contains not a Task object in the position {tasks.index(task)}'
+        return None
 
     def __get_executor_idx_error(self, executor_idx: int) -> Union[str, None]:
-        pass
+        if executor_idx is None or type(executor_idx) != int:
+            return 'The executor_idx parameter is not int.'
+        elif executor_idx + 1 > self.executor_count:
+            return 'The executor_idx parameter is out of range.'
+        return None
 
 
 def main():
