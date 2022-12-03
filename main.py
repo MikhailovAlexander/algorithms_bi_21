@@ -97,13 +97,14 @@ class Schedule:
             than the number of the executors.
         :return: the downtime duration for the executor.
         """
-        error_msg = Schedule.__get_executor_idx_error(self.__executor_count)
-        if error_msg is not None:
+        error_msg = Schedule.__get_executor_idx_error(self, executor_idx)
+        if error_msg != '':
             raise InternalScheduleException(error_msg)
 
-        if executor_idx + 1 != self.__executor_count:
-            return 0
-        return self.downtime
+        duration = 0
+        for task in self.__executor_tasks[executor_idx]:
+            duration += task.duration
+        return self.__duration - duration
 
     def get_schedule_for_executor(self, executor_idx: int) -> str:
         """Returns the schedule for the executor.
@@ -114,20 +115,25 @@ class Schedule:
             than the number of the executors.
         :return: the schedule for the executor.
         """
-        error_msg = Schedule.__get_executor_idx_error(self.__executor_count)
-        if error_msg is not None:
+        error_msg = Schedule.__get_executor_idx_error(self, executor_idx)
+        if error_msg != '':
             raise InternalScheduleException(error_msg)
 
         task_number = 0
         s = ''
+        arrayToJoin = []
         point = 0
         for task in self.__executor_tasks[executor_idx]:
-            if task_number == len(self.__tasks) - 1:
+            arrayToJoin.append(f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}')
+            """if task_number == len(self.__tasks) - 1:
                 s += f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}'
             else:
-                s += f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}\n'
+                s += f'{task_number + 1}. task: {task.name} from {point} to {point + task.duration}\n' """
             task_number += 1
             point += task.duration
+        if point < self.__duration:
+            arrayToJoin.append(f'{task_number + 1}. task: downtime from {point} to {self.__duration}')
+        s = "\n".join(arrayToJoin)
         return s
 
     def __calculate_duration(self) -> int:
@@ -169,27 +175,28 @@ class Schedule:
         return
 
     @staticmethod
-    def __get_param_error(tasks: list[Task]) -> Union[str, None]:
-        if len(tasks) == 0:
+    def __get_param_error(tasks: list[Task]):
+        if tasks is None:
+            return 'The tasks parameter is not a list'
+        elif len(tasks) == 0:
             return 'The task list is empty'
         for task in tasks:
             if task is None or type(task) != Task:
                return f'The task list contains not a Task object in the position {tasks.index(task)}'
         return None
 
-    def __get_executor_idx_error(self, executor_idx: int) -> Union[str, None]:
+    def __get_executor_idx_error(self, executor_idx: int):
         if executor_idx is None or type(executor_idx) != int:
             return 'The executor_idx parameter is not int.'
         elif executor_idx + 1 > self.executor_count:
             return 'The executor_idx parameter is out of range.'
-        return None
+        return ''
 
 
 def main():
-    tasks = [Task('a', 3), Task('b', 4), Task('c', 6), Task('d', 7),
-             Task('e', 7), Task('f', 9), Task('g', 10), Task('h', 12),
-             Task('i', 17)]
-    schedule = Schedule(tasks, 5)
+    task_a = Task('a', 2)
+    task_b = Task('b', 1)
+    schedule = Schedule([task_a, task_b], 2)
     print(f'Total duration: {schedule.duration}')
     print(f'Total downtime: {schedule.downtime}')
     for i in range(schedule.executor_count):
