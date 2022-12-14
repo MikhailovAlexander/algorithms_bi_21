@@ -65,4 +65,4 @@ $A^1$ = $C^1$:      11-3t = 10-t    t = 0.5
 
 ## Диаграмма Ганта 
 
-![Диаграмма ганта](images/диаграмма_ганта.png)
+![Диаграмма ганта](https://raw.githubusercontent.com/MikhailovAlexander/algorithms_bi_21/task_9/диаграмма_ганта.png)
